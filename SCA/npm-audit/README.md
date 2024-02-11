@@ -3,7 +3,7 @@
 ## Download the source code
 first, we need to download the source code of the project from our git repository.
 ```
-git clone https://gitlab.practical-devsecops.training/pdso/django.nv webapp
+git clone URL webapp
 ```
 ```
 cd webapp
