@@ -37,3 +37,42 @@ safety check -r requirements.txt --json | tee safety-output.json
 --json flag tells that output should be in the JSON format.
 
 
+# GitHub
+
+# Create the pipeline
+add this to the ```.github/workflows/main.yml```
+```yml
+  oast:
+    runs-on: ubuntu-20.04
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: docker run --rm -v $(pwd):/src hysnsec/safety check -r requirements.txt --json | tee oast-results.json
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Safety
+          path: oast-results.json
+        if: always()                    
+```
+
+# GitLab
+
+
+Add this job to ```.gitlab-ci.yml```
+
+```yml
+test:
+  stage: test
+  script:
+    # We are going to pull the hysnsec/safety image to run the safety scanner
+    - docker pull hysnsec/safety
+    # third party components are stored in requirements.txt for python, so we will scan this particular file with safety.
+    - docker run --rm -v $(pwd):/src hysnsec/safety check -r requirements.txt --json > oast-results.json
+  artifacts:
+    paths: [oast-results.json]
+    when: always # What does this do?
+  allow_failure: true
+```
+
