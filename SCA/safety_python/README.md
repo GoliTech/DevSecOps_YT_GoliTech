@@ -1,4 +1,6 @@
 # Software Component Analysis using Safety
+# Local
+
 
 ## Download the source code
 
