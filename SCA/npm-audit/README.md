@@ -37,10 +37,35 @@ npm audit --json | tee results.json
 ```
 
 
+# GitHub
 
+```yml
+name: Django                                  # workflow name
+on:
+  push:
+    branches:                                
+      - main
+  workflow_dispatch:
 
+jobs:
 
+  oast_npm_audit:                             # workflow name
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2             # Checkout our code
 
+      - uses: actions/setup-node@v2           # Provisioning node on the server
+        with:
+          node-version: '18'
+      
+      - run: npm install                      # Install the dependencies on the server for the scan
+      - run: npm audit --json | tee npm_audit_report.json
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: nmp_audit
+          path: npm_audit_report.json
+```
 
 
 
